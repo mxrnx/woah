@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'woah'
 
 # simple app demonstrating before and after
