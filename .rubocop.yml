@@ -1,0 +1,27 @@
+AllCops:
+        TargetRubyVersion: 2.3
+
+# false positives on inline if-blocks
+Layout/ElseAlignment:
+        Enabled: false
+Layout/EndAlignment:
+        Enabled: false
+
+# tabs > spaces
+Layout/IndentationWidth:
+        Enabled: false
+Layout/Tab:
+        Enabled: false
+Layout/IndentHash:
+        Enabled: false
+Layout/AccessModifierIndentation:
+        Enabled: false
+
+# false positives on clear function calls
+Lint/AmbiguousOperator:
+        Enabled: false
+
+Style/ClassVars:
+        Enabled: false
+Metrics/LineLength:
+        Max: 100
