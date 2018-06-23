@@ -8,7 +8,7 @@ Woah! is a minimal web framework built on Rack. It's primary design goal is to b
 `gem install woah`
 
 ## What now???
-Easy. You're gonna want to extend Woah::Base, which will be your app's, er, base.
+Simple. You're gonna want to extend Woah::Base, which will be your app's, er, base.
 
 ```ruby
 require 'woah'
@@ -55,4 +55,23 @@ end
 
 There's two new blocks here: `before` and `after`. They do things before and after the relevant route gets executed (duh!). This example will increment a counter everytime a page is hit, regardless of what page it is.
 
-More to come.
+Of course, getting pages isn't everything you can do in the Internet. There's other HTTP verbs as well, like POST. Behold:
+
+```ruby
+require 'woah'
+
+class MyApp < Woah::Base
+	on '/' do
+		@@content ||= '<form action="/" method="post"><input type="submit" value="click me please" /></form>'
+		@@content
+	end
+
+	on '/', 'POST' do
+		@@content = 'thanks for clicking!'
+	end
+end
+```
+
+As soon as you click the button on `/`, the message on the page will transform.
+
+More to come soon.
