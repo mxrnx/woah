@@ -3,12 +3,16 @@
 require_relative '../lib/woah'
 
 class TestApp < Woah::Base
+	before do
+		@@time = 'chunky'
+	end
+
 	on '/' do
 		'hi there!'
 	end
 
-	before do
-		@@time = 'chunky'
+	on '/', 'POST' do
+		'got post!'
 	end
 
 	on '/before_after' do

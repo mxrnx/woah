@@ -9,7 +9,7 @@ module Woah
 
 		# answer the phone
 		def self.call(env)
-			route = @@routes[env['REQUEST_URI']]
+			route = @@routes[[env['REQUEST_URI'], env['REQUEST_METHOD']]]
 			@@override = {}
 
 			@@before&.call
@@ -26,8 +26,9 @@ module Woah
 		end
 
 		# register new routes
-		def self.on(path, &action)
-			@@routes[path] = Route.new(path, 'GET', &action)
+		def self.on(path, method = 'GET', &action)
+			raise 'unknown method' unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
+			@@routes[[path, method]] = Route.new(path, method, &action)
 		end
 
 		# things to do before handling the routes
@@ -51,13 +52,6 @@ module Woah
 		# get this show on the road
 		def self.run!(port = 4422)
 			Rack::Handler.pick(%w[thin webrick]).run new, Port: port
-		end
-
-		private
-
-		# log to stdout
-		def say(message)
-			puts 'Woah! ' + message.capitalize
 		end
 	end
 end
