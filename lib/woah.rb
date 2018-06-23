@@ -2,7 +2,7 @@
 
 require 'rack'
 
-# Woah! is a single-file web framework
+# Woah! is a minimal web framework based on Rack.
 module Woah
 end
 

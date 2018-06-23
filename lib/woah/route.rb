@@ -9,6 +9,12 @@ module Woah
 			@action = action
 		end
 
+		# Returns true if the combination of method and path matches this route.
+		def matches?(method, path)
+			method == @method && path == @path
+		end
+
+		# Execute this route's actions.
 		def execute
 			status = 200
 			headers = { 'Content-Type' => 'text/html; charset=utf-8' }
