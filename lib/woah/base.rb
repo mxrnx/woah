@@ -5,11 +5,13 @@ module Woah
 	class Base
 		@@before = nil
 		@@after = nil
-		@@routes = {}
+		@@routes = []
 
-		# answer the phone
+		# Answer the phone.
+		# Finds a relevant route for the parameters in env,
+		# and builds a response.
 		def self.call(env)
-			route = @@routes[[env['REQUEST_URI'], env['REQUEST_METHOD']]]
+			route = @@routes.select { |r| r.matches?(env['REQUEST_METHOD'], env['REQUEST_URI']) }[0]
 			@@override = {}
 
 			@@before&.call
@@ -25,31 +27,33 @@ module Woah
 			response.values
 		end
 
-		# register new routes
+		# Register new routes. The optional method argument can be used to specify a method.
 		def self.on(path, method = 'GET', &action)
 			raise 'unknown method' unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
-			@@routes[[path, method]] = Route.new(path, method, &action)
+
+			@@routes.push Route.new(path, method, &action)
 		end
 
-		# things to do before handling the routes
+		# Action that will be called before every route.
 		def self.before(&action)
 			@@before = action
 		end
 
-		# things to do after handling the routes
+		# Action that will be called after every route.
 		def self.after(&action)
 			@@after = action
 		end
 
-		# override an item in the response
+		# Override an item in the response.
 		def self.set(item, content)
 			unless %i[status headers body].include? item
 				raise 'unknown item ' + item.to_s + ', cannot override'
 			end
+
 			@@override[item] = content
 		end
 
-		# get this show on the road
+		# Get this show on the road.
 		def self.run!(port = 4422)
 			Rack::Handler.pick(%w[thin webrick]).run new, Port: port
 		end
