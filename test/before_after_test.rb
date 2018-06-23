@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BeforeAfterTest < MiniTest::Test
 	def setup
 		@env = {}
@@ -15,6 +17,6 @@ class BeforeAfterTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'bacon', TestApp.get_time
+		assert_equal 'bacon', TestApp.time
 	end
 end

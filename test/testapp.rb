@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/woah'
 
 class TestApp < Woah::Base
@@ -17,7 +19,7 @@ class TestApp < Woah::Base
 		@@time = 'bacon'
 	end
 
-	def self.get_time
+	def self.time
 		@@time
 	end
 end

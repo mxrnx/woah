@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BasicVerbsTest < MiniTest::Test
 	def setup
 		@env = {}
