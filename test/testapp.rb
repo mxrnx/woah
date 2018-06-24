@@ -4,7 +4,7 @@ require_relative '../lib/woah'
 
 class TestApp < Woah::Base
 	before do
-		@@time = 'chunky'
+		@a = 'chunky'
 	end
 
 	on '/' do
@@ -15,15 +15,15 @@ class TestApp < Woah::Base
 		'got post!'
 	end
 
-	on '/before_after' do
-		@@time
+	on '/before' do
+		@a
+	end
+
+	on '/after' do
+		@b
 	end
 
 	after do
-		@@time = 'bacon'
-	end
-
-	def self.time
-		@@time
+		@b = 'bacon'
 	end
 end

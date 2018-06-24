@@ -8,6 +8,41 @@ module Woah
 		@@match_data = nil
 		@@routes = []
 
+		def call(env)
+			@@override = {}
+			@@match_data = nil
+
+			@@before&.call
+
+			response = handle_route env
+
+			@@after&.call
+
+			%i[status headers body].each do |r|
+				response[r] = @@override[r] unless @@override[r].nil?
+			end
+
+			response.values
+		end
+
+		private
+
+		def handle_route(env)
+			route = @@routes.select { |r| r.matches?(env['REQUEST_METHOD'], env['REQUEST_URI']) }[0]
+
+			if route.nil?
+				return {
+					status: 404,
+					headers: { 'Content-Type' => 'text/html; charset=utf-8' },
+					body: 'not found L:'
+				}
+			end
+
+			@@match_data = route.match_data if route.match_data
+
+			route.execute
+		end
+
 		class << self
 			# Get this show on the road.
 			def run!(port = 4422)
@@ -18,16 +53,7 @@ module Woah
 			# Finds a relevant route for the parameters in env,
 			# and builds a response.
 			def call(env)
-				@@override = {}
-				@@match_data = nil
-
-				@@before&.call
-
-				response = handle_route env
-
-				@@after&.call
-
-				response
+				new.call env
 			end
 
 			# Register new routes. The optional method argument can be used to specify a method.
@@ -59,23 +85,6 @@ module Woah
 			# Get match data from Regexp routes.
 			def match
 				@@match_data
-			end
-
-			private
-
-			def handle_route(env)
-				route = @@routes.select { |r| r.matches?(env['REQUEST_METHOD'], env['REQUEST_URI']) }[0]
-
-				return [404, { 'Content-Type' => 'text/html; charset=utf-8' }, 'not found L:'] if route.nil?
-
-				@@match_data = route.match_data if route.match_data
-
-				response = route.execute
-				%i[status headers body].each do |r|
-					response[r] = @@override[r] unless @@override[r].nil?
-				end
-
-				response.values
 			end
 		end
 	end
