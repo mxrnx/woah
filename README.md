@@ -61,8 +61,11 @@ Of course, getting pages isn't everything you can do in the Internet. There's ot
 require 'woah'
 
 class MyApp < Woah::Base
-	on '/' do
+	before do
 		@@content ||= '<form action="/" method="post"><input type="submit" value="click me please" /></form>'
+	end
+
+	on '/' do
 		@@content
 	end
 
@@ -74,4 +77,15 @@ end
 
 As soon as you click the button on `/`, the message on the page will transform.
 
-More to come soon.
+Of course, sometimes you want routes to be flexible, and to catch more than one expression. For this, you can use regular expressions instead of strings as your routes, just like this:
+```ruby
+require 'woah'
+
+class MyApp < Woah::Base
+	on %{^/greet/(\w+)$} do
+		"oh, hello, I didn't see you there #{match[1]}"
+	end
+end
+```
+
+Now, visiting `/greet/Socrates` will greet you with your own name. Wonderful. By the way, you may have noticed we're using `%r{}` to delimit our regex, instead of the more common `//`. This is because of how common slashes are in routes, so it's recommended to use this syntax. You can use slashes to delimit your regex though, if you like. I won't judge you.
