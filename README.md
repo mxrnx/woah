@@ -55,14 +55,17 @@ end
 
 There's two new blocks here: `before` and `after`. They do things before and after the relevant route gets executed (duh!). This example will increment a counter everytime a page is hit, regardless of what page it is.
 
-Of course, getting pages isn't everything you can do in the Internet. There's other HTTP verbs as well, like POST. Behold:
+Of course, getting pages isn't everything you can do on the Internet. There's other HTTP verbs as well, like POST. Behold:
 
 ```ruby
 require 'woah'
 
 class MyApp < Woah::Base
 	before do
-		@@content ||= '<form action="/" method="post"><input type="submit" value="click me please" /></form>'
+		@@content ||=
+		'<form action="/" method="post">'\
+			'<input type="submit" value="click me please" />'\
+		'</form>'
 	end
 
 	on '/' do
@@ -78,6 +81,7 @@ end
 As soon as you click the button on `/`, the message on the page will transform.
 
 Of course, sometimes you want routes to be flexible, and to catch more than one expression. For this, you can use regular expressions instead of strings as your routes, just like this:
+
 ```ruby
 require 'woah'
 
@@ -89,3 +93,31 @@ end
 ```
 
 Now, visiting `/greet/Socrates` will greet you with your own name. Wonderful. By the way, you may have noticed we're using `%r{}` to delimit our regex, instead of the more common `//`. This is because of how common slashes are in routes, so it's recommended to use this syntax. You can use slashes to delimit your regex though, if you like. I won't judge you.
+
+We're nearing the end of this little guide already, I'm afraid. However, there's still one more trick you need to see. Look, sometimes, you might disagree with the things Woah! thinks up for you. That's why you can override everything Woah! is about to send, if you so please. Por exemplo:
+
+```ruby
+require_relative 'lib/woah'
+
+class MyApp < Woah::Base
+	on '/' do
+		'(insert super secret information)'
+	end
+
+	on %r{^/pass/(\w+)$} do
+		@password = match[1]
+		'logged in! <a href="/">back to root</a>'
+	end
+
+	after do
+		unless @password && @password == 'penguin'
+			set :status, 403
+			set :body, 'log in first!'
+		end
+	end
+end
+
+MyApp.run!
+```
+
+That's all. Have fun!

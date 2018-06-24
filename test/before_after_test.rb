@@ -6,7 +6,7 @@ class BeforeAfterTest < MiniTest::Test
 	end
 
 	def test_get_before
-		@env['REQUEST_URI'] = '/before_after'
+		@env['REQUEST_URI'] = '/before'
 		@env['REQUEST_METHOD'] = 'GET'
 
 		response = TestApp.call @env
@@ -14,9 +14,11 @@ class BeforeAfterTest < MiniTest::Test
 		assert_equal 200, response[0]
 		assert_equal 'chunky', response[2]
 
+		@env['REQUEST_URI'] = '/after'
+
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'bacon', TestApp.time
+		assert_equal 'bacon', response[2]
 	end
 end
