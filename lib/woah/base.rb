@@ -75,9 +75,7 @@ module Woah
 
 			# Override an item in the response.
 			def set(item, content)
-				unless %i[status headers body].include? item
-					raise 'unknown item ' + item.to_s + ', cannot override'
-				end
+				raise "unknown item #{item}, cannot override" unless %i[status headers body].include? item
 
 				@@override[item] = content
 			end

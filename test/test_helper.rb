@@ -12,7 +12,7 @@ ENV['RACK_ENV'] = 'test'
 
 require 'minitest/autorun'
 
-require_relative 'testapp'
+require_relative 'test_app'
 
 Dir.foreach('test/') do |test|
 	next if ['.', '..'].include? test
