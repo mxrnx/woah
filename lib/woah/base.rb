@@ -14,7 +14,7 @@ module Woah
 
 			@@before&.call
 
-			response = handle_route env
+			response = resolve_route env['REQUEST_METHOD'], env['REQUEST_URI']
 
 			@@after&.call
 
@@ -25,10 +25,9 @@ module Woah
 			response.values
 		end
 
-		private
-
-		def handle_route(env)
-			route = @@routes.select { |r| r.matches?(env['REQUEST_METHOD'], env['REQUEST_URI']) }[0]
+		# Resolves and executes a round
+		def resolve_route(method, path)
+			route = @@routes.select { |r| r.matches?(method, path) }[0]
 
 			if route.nil?
 				return {
@@ -71,6 +70,17 @@ module Woah
 			# Action that will be called after every route.
 			def after(&action)
 				@@after = action
+			end
+
+			# Redirect to another route.
+			def redirect_to(path, method = 'GET')
+				result = new.resolve_route method, path
+
+				%i[status headers].each do |r|
+					set r, result[r]
+				end
+
+				result[:body]
 			end
 
 			# Override an item in the response.
