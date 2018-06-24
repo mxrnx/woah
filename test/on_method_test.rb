@@ -19,6 +19,36 @@ class OnMethodTest < MiniTest::Test
 		assert_equal "it's a secret to everybody", response[2]
 	end
 
+	def test_regexp_path
+		TestApp.on %r{^/regex/[0-9]+$} do
+			'heya'
+		end
+
+		@env['REQUEST_URI'] = '/regex/22'
+		@env['REQUEST_METHOD'] = 'GET'
+		response = TestApp.call @env
+
+		assert_equal 200, response[0]
+
+		@env['REQUEST_URI'] = '/regex/seventy'
+		response = TestApp.call @env
+
+		assert_equal 404, response[0]
+	end
+
+	def test_regexp_match_data
+		TestApp.on %r{^/myname/(\w+)$} do
+			'hi there, ' + TestApp.match[1]
+		end
+
+		@env['REQUEST_URI'] = '/myname/Charles'
+		@env['REQUEST_METHOD'] = 'GET'
+		response = TestApp.call @env
+
+		assert_equal 200, response[0]
+		assert_equal 'hi there, Charles', response[2]
+	end
+
 	def test_illegal_method
 		assert_raises RuntimeError do
 			TestApp.on '/', 'BUBBLES' do
