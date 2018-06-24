@@ -8,7 +8,7 @@ Woah! is a minimal web framework built on Rack. It's primary design goal is to b
 ## Installation
 `gem install woah`
 
-## What now???
+## What do I do with it???
 Simple. You're gonna want to extend Woah::Base, which will be your app's, er, base.
 
 ```ruby
