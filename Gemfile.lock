@@ -48,7 +48,6 @@ DEPENDENCIES
   rack
   rake
   rubocop
-  simplecov
 
 BUNDLED WITH
    1.16.2
