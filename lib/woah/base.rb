@@ -46,8 +46,8 @@ module Woah
 
 		class << self
 			# Get this show on the road.
-			def run!(port = 4422)
-				Rack::Handler.pick(%w[thin webrick]).run new, Port: port
+			def run!(host = '0.0.0.0', port = 4422)
+				Rack::Handler.pick(%w[thin webrick]).run new, Host: host, Port: port
 			end
 
 			# Answer the phone.
