@@ -7,5 +7,6 @@ module Woah
 end
 
 require_relative 'woah/base'
+require_relative 'woah/request'
 require_relative 'woah/route'
 require_relative 'woah/version'

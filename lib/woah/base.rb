@@ -6,11 +6,13 @@ module Woah
 		@@before = nil
 		@@after = nil
 		@@match_data = nil
+		@@request = nil
 		@@routes = []
 
 		def call(env)
 			@@override = {}
 			@@match_data = nil
+			@@request = Request.new env
 
 			@@before&.call
 
@@ -93,6 +95,11 @@ module Woah
 			# Get match data from Regexp routes.
 			def match
 				@@match_data
+			end
+
+			# Get request object
+			def request
+				@@request
 			end
 		end
 	end
