@@ -12,7 +12,7 @@ module Woah
 		def call(env)
 			@@override = {}
 			@@match_data = nil
-			@@request = Request.new env
+			@@request = Rack::Request.new env
 
 			@@before&.call
 
