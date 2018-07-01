@@ -16,7 +16,7 @@ class OnMethodTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 404, response[0]
-		assert_equal "it's a secret to everybody", response[2]
+		assert_equal "it's a secret to everybody", response[2][0]
 	end
 
 	def test_regexp_path
@@ -46,7 +46,7 @@ class OnMethodTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'hi there, Charles', response[2]
+		assert_equal 'hi there, Charles', response[2][0]
 	end
 
 	def test_illegal_method
@@ -77,6 +77,6 @@ class OnMethodTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal '/ip', response[2]
+		assert_equal '/ip', response[2][0]
 	end
 end

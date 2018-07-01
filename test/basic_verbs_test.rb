@@ -11,7 +11,7 @@ class BasicVerbsTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'hi there!', response[2]
+		assert_equal 'hi there!', response[2][0]
 	end
 
 	def test_post
@@ -20,7 +20,7 @@ class BasicVerbsTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'got post!', response[2]
+		assert_equal 'got post!', response[2][0]
 	end
 
 	def test_get_404

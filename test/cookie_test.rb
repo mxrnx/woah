@@ -12,7 +12,7 @@ class CookieTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'something', response[2]
+		assert_equal 'something', response[2][0]
 	end
 
 	def test_get_nonexistent_cookie
@@ -21,7 +21,7 @@ class CookieTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal '', response[2]
+		assert_equal '', response[2][0]
 	end
 
 	def test_set_cookie
@@ -31,6 +31,6 @@ class CookieTest < MiniTest::Test
 
 		assert_equal 200, response[0]
 		assert_equal 'fruit=apple', response[1]['Set-Cookie']
-		assert_equal '', response[2]
+		assert_equal '', response[2][0]
 	end
 end
