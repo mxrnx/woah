@@ -33,6 +33,9 @@ module Woah
 				@@response[r] = @@override[r] unless @@override[r].nil?
 			end
 
+			# make sure we do not give nil bodies to the server
+			@@response[:body] ||= ''
+
 			@@response.values
 		end
 
