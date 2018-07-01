@@ -70,4 +70,13 @@ class OnMethodTest < MiniTest::Test
 			end
 		end
 	end
+
+	def test_request_object
+		@env['REQUEST_URI'] = '/ip'
+		@env['REQUEST_METHOD'] = 'GET'
+		response = TestApp.call @env
+
+		assert_equal 200, response[0]
+		assert_equal '/ip', response[2]
+	end
 end
