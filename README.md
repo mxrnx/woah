@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/knarka/woah/badge.svg?branch=master)](https://coveralls.io/github/knarka/woah?branch=master)
 [![Gem Version](https://badge.fury.io/rb/woah.svg)](https://badge.fury.io/rb/woah)
 
-Woah! is a minimal web framework built on Rack. It's primary design goal is to be unobtrusive, and to just let you do your thing, dude.
+Woah! is an unobtrusive, (extremely) minimal web framework built on Rack.
 
 ## Installation
 `gem install woah`
@@ -54,7 +54,7 @@ class MyApp < Woah::Base
 end
 ```
 
-There's two new blocks here: `before` and `after`. They do things before and after the relevant route gets executed (duh!). This example will increment a counter everytime a page is hit, regardless of what page it is.
+There's two new blocks here: `before` and `after`. They do things before and after the relevant route gets executed. This example will increment a counter everytime a page is hit, regardless of what page it is.
 
 Of course, getting pages isn't everything you can do on the Internet. There's other HTTP verbs as well, like POST. Behold:
 
@@ -87,13 +87,29 @@ Of course, sometimes you want routes to be flexible, and to catch more than one 
 require 'woah'
 
 class MyApp < Woah::Base
-	on %{^/greet/(\w+)$} do
+	on %r{^/greet/(\w+)$} do
 		"oh, hello, I didn't see you there #{match[1]}"
 	end
 end
 ```
 
 Now, visiting `/greet/Socrates` will greet you with your own name. Wonderful. By the way, you may have noticed we're using `%r{}` to delimit our regex, instead of the more common `//`. This is because of how common slashes are in routes, so it's recommended to use this syntax. You can use slashes to delimit your regex though, if you like. I won't judge you.
+
+Redirects are possible as well:
+
+```ruby
+require 'woah'
+
+class MyApp < Woah::Base
+	on '/' do
+		redirect_to '/landing'
+	end
+
+	on '/landing' do
+		'welcome'
+	end
+end
+```
 
 We're nearing the end of this little guide already, I'm afraid. However, there's still one more trick you need to see. Look, sometimes, you might disagree with the things Woah! thinks up for you. That's why you can override everything Woah! is about to send, if you so please. Por exemplo:
 
