@@ -31,6 +31,10 @@ class TestApp < Woah::Base
 		cookie 'fruit', 'apple'
 	end
 
+	on '/ip' do
+		request.env['REQUEST_URI']
+	end
+
 	after do
 		@b = 'bacon'
 	end
