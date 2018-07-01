@@ -111,6 +111,24 @@ class MyApp < Woah::Base
 end
 ```
 
+So are cookies:
+
+```ruby
+require 'woah'
+
+class MyApp < Woah::Base
+	on '/' do
+		cookie['chunky'] || 'no cookie set'
+	end
+
+	on '/set' do
+		cookie['chunky'] = 'bacon'
+	end
+end
+```
+
+Upon first visiting, this page will tell you there's no cookie set. After visiting `/set` however, it'll display `bacon`, as that is now the content of the `chunky` cookie.
+
 We're nearing the end of this little guide already, I'm afraid. However, there's still one more trick you need to see. Look, sometimes, you might disagree with the things Woah! thinks up for you. That's why you can override everything Woah! is about to send, if you so please. Por exemplo:
 
 ```ruby

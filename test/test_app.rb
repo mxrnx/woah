@@ -23,6 +23,14 @@ class TestApp < Woah::Base
 		@b
 	end
 
+	on '/get_cookie' do
+		cookie 'test'
+	end
+
+	on '/set_cookie' do
+		cookie 'fruit', 'apple'
+	end
+
 	after do
 		@b = 'bacon'
 	end
