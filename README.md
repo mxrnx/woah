@@ -118,11 +118,11 @@ require 'woah'
 
 class MyApp < Woah::Base
 	on '/' do
-		cookie['chunky'] || 'no cookie set'
+		cookie 'chunky' || 'no cookie set'
 	end
 
 	on '/set' do
-		cookie['chunky'] = 'bacon'
+		cookie 'chunky', 'bacon'
 	end
 end
 ```
