@@ -29,14 +29,19 @@ module Woah
 
 			@@after&.call
 
-			%i[status headers body].each do |r|
-				@@response[r] = @@override[r] unless @@override[r].nil?
-			end
+			override_values
 
 			# make sure we do not give nil bodies to the server
 			@@response[:body] ||= ''
+			@@response[:body] = [@@response[:body]]
 
 			@@response.values
+		end
+
+		def override_values
+			%i[status headers body].each do |r|
+				@@response[r] = @@override[r] unless @@override[r].nil?
+			end
 		end
 
 		# Resolves and executes a round
@@ -63,7 +68,7 @@ module Woah
 
 			# Get this show on the road.
 			def run!(host = '0.0.0.0', port = 4422)
-				Rack::Handler.pick(%w[thin webrick]).run new, Host: host, Port: port
+				Rack::Handler.pick(%w[thin puma webrick]).run new, Host: host, Port: port
 			end
 
 			# Register new routes. The optional method argument can be used to specify a method.

@@ -6,4 +6,4 @@ gem 'coveralls', require: false
 gem 'minitest'
 gem 'rack'
 gem 'rake'
-gem 'rubocop'
+gem 'rubocop', require: false

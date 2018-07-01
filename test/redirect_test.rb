@@ -17,7 +17,7 @@ class RedirectTest < MiniTest::Test
 		response = TestApp.call @env
 
 		assert_equal 200, response[0]
-		assert_equal 'hi there!', response[2]
+		assert_equal 'hi there!', response[2][0]
 		assert_equal 'gone back', $something
 	end
 		# rubocop:enable Style/GlobalVars
