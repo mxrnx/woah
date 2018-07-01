@@ -9,22 +9,31 @@ module Woah
 		@@request = nil
 		@@routes = []
 
-		def call(env)
+		def initialize
 			@@override = {}
 			@@match_data = nil
+			@@response = nil
+		end
+
+		# Answer the phone.
+		# Finds a relevant route for the parameters in env,
+		# and builds a response.
+		def call(env)
+			initialize
+
 			@@request = Rack::Request.new env
 
 			@@before&.call
 
-			response = resolve_route env['REQUEST_METHOD'], env['REQUEST_URI']
+			@@response = resolve_route env['REQUEST_METHOD'], env['REQUEST_URI']
 
 			@@after&.call
 
 			%i[status headers body].each do |r|
-				response[r] = @@override[r] unless @@override[r].nil?
+				@@response[r] = @@override[r] unless @@override[r].nil?
 			end
 
-			response.values
+			@@response.values
 		end
 
 		# Resolves and executes a round
@@ -45,16 +54,13 @@ module Woah
 		end
 
 		class << self
+			def call(env)
+				new.call env
+			end
+
 			# Get this show on the road.
 			def run!(host = '0.0.0.0', port = 4422)
 				Rack::Handler.pick(%w[thin webrick]).run new, Host: host, Port: port
-			end
-
-			# Answer the phone.
-			# Finds a relevant route for the parameters in env,
-			# and builds a response.
-			def call(env)
-				new.call env
 			end
 
 			# Register new routes. The optional method argument can be used to specify a method.
@@ -90,6 +96,22 @@ module Woah
 				raise "unknown item #{item}, cannot override" unless %i[status headers body].include? item
 
 				@@override[item] = content
+			end
+
+			# Set or read cookies
+			def cookie(key, value = nil)
+				if value.nil?
+					# Read cookie
+					@@request.env['HTTP_COOKIE']&.split('; ')&.each do |c|
+						s = c.split('=')
+						return s[1] if s[0] == key
+					end
+					nil # if not found
+				else
+					# Set cookie
+					@@override[:headers] = {}
+					Rack::Utils.set_cookie_header!(@@override[:headers], key, value)
+				end
 			end
 
 			# Get match data from Regexp routes.
