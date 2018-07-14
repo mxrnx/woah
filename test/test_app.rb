@@ -31,8 +31,20 @@ class TestApp < Woah::Base
 		cookie 'fruit', 'apple'
 	end
 
+	on '/set_illegal_cookie' do
+		cookie 'one', 1
+	end
+
+	on '/delete_cookie' do
+		cookie 'foo', :delete
+	end
+
 	on '/ip' do
 		request.env['REQUEST_URI']
+	end
+
+	TestApp.on '/nose' do
+		TestApp.set :nose, true
 	end
 
 	after do
