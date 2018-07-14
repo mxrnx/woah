@@ -38,6 +38,7 @@ module Woah
 			@@response.values
 		end
 
+		# Applies user overrides
 		def override_values
 			%i[status headers body].each do |r|
 				@@response[r] = @@override[r] unless @@override[r].nil?
@@ -73,7 +74,9 @@ module Woah
 
 			# Register new routes. The optional method argument can be used to specify a method.
 			def on(path, method = 'GET', &action)
-				raise 'unknown method' unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
+				unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
+					raise ArgumentError, 'Unknown method'
+				end
 
 				@@routes.push Route.new(path, method, &action)
 			end
@@ -101,24 +104,38 @@ module Woah
 
 			# Override an item in the response.
 			def set(item, content)
-				raise "unknown item #{item}, cannot override" unless %i[status headers body].include? item
+				unless %i[status headers body].include? item
+					raise ArgumentError, "Unknown item #{item}, cannot override"
+				end
 
 				@@override[item] = content
 			end
 
 			# Set or read cookies
+			# Value should be either: nil, to read a cookie; a string, to set a cookie; or :delete, to
+			# delete a cookie
 			def cookie(key, value = nil)
+				# Read cookie
 				if value.nil?
-					# Read cookie
 					@@request.env['HTTP_COOKIE']&.split('; ')&.each do |c|
 						s = c.split('=')
 						return s[1] if s[0] == key
 					end
 					nil # if not found
-				else
-					# Set cookie
+
+				# Delete cookie
+				elsif value == :delete
 					@@override[:headers] = {}
-					Rack::Utils.set_cookie_header!(@@override[:headers], key, value)
+					Rack::Utils.delete_cookie_header! @@override[:headers], key
+
+				# Set cookie
+				elsif value.is_a? String
+					@@override[:headers] = {}
+					Rack::Utils.set_cookie_header! @@override[:headers], key, value
+
+				# Invalid argument
+				else
+					raise ArgumentError, 'Value should be either nil, :delete, or a string'
 				end
 			end
 

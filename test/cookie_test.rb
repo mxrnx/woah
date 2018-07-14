@@ -33,4 +33,23 @@ class CookieTest < MiniTest::Test
 		assert_equal 'fruit=apple', response[1]['Set-Cookie']
 		assert_equal '', response[2][0]
 	end
+
+	def test_set_illegal_cookie
+		@env['REQUEST_URI'] = '/set_illegal_cookie'
+		@env['REQUEST_METHOD'] = 'GET'
+
+		assert_raises ArgumentError do
+			TestApp.call @env
+		end
+	end
+
+	def test_delete_cookie
+		@env['REQUEST_URI'] = '/delete_cookie'
+		@env['REQUEST_METHOD'] = 'GET'
+
+		response = TestApp.call @env
+
+		assert_equal 200, response[0]
+		assert response[1]['Set-Cookie'].include? 'max-age=0'
+	end
 end

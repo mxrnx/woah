@@ -50,7 +50,7 @@ class OnMethodTest < MiniTest::Test
 	end
 
 	def test_illegal_method
-		assert_raises RuntimeError do
+		assert_raises ArgumentError do
 			TestApp.on '/', 'BUBBLES' do
 				'oOooo oO oO'
 			end
@@ -64,10 +64,11 @@ class OnMethodTest < MiniTest::Test
 	end
 
 	def test_illegal_set
-		TestApp.on '/nose' do
-			assert_raises RuntimeError do
-				TestApp.set :nose, true
-			end
+		@env['REQUEST_URI'] = '/nose'
+		@env['REQUEST_METHOD'] = 'GET'
+
+		assert_raises ArgumentError do
+			TestApp.call @env
 		end
 	end
 
