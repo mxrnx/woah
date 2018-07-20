@@ -2,7 +2,7 @@
 
 require 'rake/testtask'
 
-task default: %w[run]
+task default: %w[test style]
 
 task :test do
 	ruby 'test/test_helper.rb'
