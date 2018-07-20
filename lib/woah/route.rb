@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Woah
-	# Holds Woah! routes
+	# A Woah! routes
 	class Route
 		attr_accessor :match
 
@@ -13,7 +13,10 @@ module Woah
 			@match = nil
 		end
 
-		# Returns true if the combination of method and path matches this route.
+		# Checks if a given route is the same as this one
+		# @param path [String, Regexp] the path to redirect to
+		# @param method [String] the HTTP method to use
+		# @return [Boolean] true if given method and path match this route
 		def matches?(method, path)
 			case @path
 			when String
@@ -25,6 +28,7 @@ module Woah
 		end
 
 		# Execute this route's actions.
+		# @return [Hash] the route's response
 		def execute
 			status = 200
 			headers = { 'Content-Type' => 'text/html; charset=utf-8' }

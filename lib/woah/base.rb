@@ -25,7 +25,7 @@ module Woah
 
 			@@before&.call
 
-			@@response = resolve_route env['REQUEST_METHOD'], env['REQUEST_URI']
+			@@response = resolve_route env['REQUEST_URI'], env['REQUEST_METHOD']
 
 			@@after&.call
 
@@ -46,7 +46,10 @@ module Woah
 		end
 
 		# Resolves and executes a round
-		def resolve_route(method, path)
+		# @param path [String, Regexp] the path to respond to
+		# @param method [String] the HHTP method to use
+		# @return [Hash] the route's response
+		def resolve_route(path, method)
 			route = @@routes.select { |r| r.matches?(method, path) }[0]
 
 			if route.nil?
@@ -63,16 +66,22 @@ module Woah
 		end
 
 		class << self
+			# Forwards to a new instance's #call method
 			def call(env)
 				new.call env
 			end
 
 			# Get this show on the road.
+			# @host [String] the host to use
+			# @port [Integer] the port to use
 			def run!(host = '0.0.0.0', port = 4422)
 				Rack::Handler.pick(%w[thin puma]).run new, Host: host, Port: port
 			end
 
-			# Register new routes. The optional method argument can be used to specify a method.
+			# Register new routes. The optional method argument can be used to specify a method
+			# @param path [String, Regexp] the path to respond to
+			# @param method [String] the HHTP method to use
+			# @raise [ArgumentError] if `method` is not a valid HTTP method
 			def on(path, method = 'GET', &action)
 				unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
 					raise ArgumentError, 'Unknown method'
@@ -81,19 +90,22 @@ module Woah
 				@@routes.push Route.new(path, method, &action)
 			end
 
-			# Action that will be called before every route.
+			# Takes a block that will be executed after every route
 			def before(&action)
 				@@before = action
 			end
 
-			# Action that will be called after every route.
+			# Takes a block that will be executed after every route
 			def after(&action)
 				@@after = action
 			end
 
 			# Redirect to another route.
+			# @param path [String, Regexp] the path to redirect to
+			# @param method [String] the HTTP method to use
+			# @return [String] the redirect's body
 			def redirect_to(path, method = 'GET')
-				result = new.resolve_route method, path
+				result = new.resolve_route path, method
 
 				%i[status headers].each do |r|
 					set r, result[r]
@@ -103,6 +115,9 @@ module Woah
 			end
 
 			# Override an item in the response.
+			# @param item [:status, :headers, :body] the item to be overriden
+			# @param content the content to override the item with
+			# @raise [ArgumentError] if item is outside the range of accepted values
 			def set(item, content)
 				unless %i[status headers body].include? item
 					raise ArgumentError, "Unknown item #{item}, cannot override"
@@ -112,8 +127,9 @@ module Woah
 			end
 
 			# Set or read cookies
-			# Value should be either: nil, to read a cookie; a string, to set a cookie; or :delete, to
-			# delete a cookie
+			# Depending on the type of `value`, respectively reads, deletes, or sets a cookie
+			# @param key [String] the name of the cookie
+			# @param value [nil, :delete, String]
 			def cookie(key, value = nil)
 				# Read cookie
 				if value.nil?
@@ -139,12 +155,12 @@ module Woah
 				end
 			end
 
-			# Get match data from Regexp routes.
+			# Returns the value of class attribute match
 			def match
 				@@match
 			end
 
-			# Get request object
+			# Returns the value of class attribute request
 			def request
 				@@request
 			end
