@@ -80,7 +80,7 @@ module Woah
 
 			# Register new routes. The optional method argument can be used to specify a method
 			# @param path [String, Regexp] the path to respond to
-			# @param method [String] the HHTP method to use
+			# @param method [String] the HTTP method to use
 			# @raise [ArgumentError] if `method` is not a valid HTTP method
 			def on(path, method = 'GET', &action)
 				unless %w[DELETE GET HEAD OPTIONS PATCH POST PUT].include? method
