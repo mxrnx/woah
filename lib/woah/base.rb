@@ -47,7 +47,7 @@ module Woah
 
 		# Resolves and executes a round
 		# @param path [String, Regexp] the path to respond to
-		# @param method [String] the HHTP method to use
+		# @param method [String] the HTTP method to use
 		# @return [Hash] the route's response
 		def resolve_route(path, method)
 			route = @@routes.select { |r| r.matches?(method, path) }[0]
