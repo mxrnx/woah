@@ -5,13 +5,13 @@ module Woah
 	class Base
 		@@before = nil
 		@@after = nil
-		@@match_data = nil
+		@@match = nil
 		@@request = nil
 		@@routes = []
 
 		def initialize
 			@@override = {}
-			@@match_data = nil
+			@@match = nil
 			@@response = nil
 		end
 
@@ -57,7 +57,7 @@ module Woah
 				}
 			end
 
-			@@match_data = route.match_data if route.match_data
+			@@match = route.match if route.match
 
 			route.execute
 		end
@@ -141,7 +141,7 @@ module Woah
 
 			# Get match data from Regexp routes.
 			def match
-				@@match_data
+				@@match
 			end
 
 			# Get request object
