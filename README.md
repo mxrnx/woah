@@ -89,7 +89,7 @@ class MyApp < Woah::Base
 end
 ```
 
-Now, visiting `/greet/Socrates` will greet you with your own name. Wonderful. By the way, you may have noticed the regex here is delimited by `%r{}`, instead of the more common `//`. This is because of how common slashes are in routes, so it's recommended to use this syntax. You can use slashes to delimit your regex though, if you like. I won't judge you.
+Now, visiting `/greet/Socrates` will greet you with your own name (assuming your name is Socrates). Wonderful. By the way, you may have noticed the regex here is delimited by `%r{}`, instead of the more common `//`. This is because of how common slashes are in routes, so it's recommended to use this syntax. You can use slashes to delimit your regex though, if you like. I won't judge you.
 
 Redirects are possible as well:
 

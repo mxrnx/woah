@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 	s.platform = Gem::Platform::RUBY
 	s.license = 'GPL-3.0'
 	s.summary = 'Woah! is a minimal web framework built on Rack.'
-	s.description = 'Woah! is a minimal web framework built on Rack. It\'s primary
-	design goal is to be unobtrusive, and to just let you do your thing, dude.'
+	s.description = 'Woah! is a minimal web framework built on Rack designed to let you just do your
+	thing.'
 	s.author = 'knarka'
 	s.email = 'knarka@airmail.cc'
 	s.homepage = 'https://github.com/knarka/woah'
