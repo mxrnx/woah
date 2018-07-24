@@ -1,6 +1,7 @@
 # Woah!
 [![Build Status](https://travis-ci.org/knarka/woah.svg?branch=master)](https://travis-ci.org/knarka/woah)
 [![Coverage Status](https://coveralls.io/repos/github/knarka/woah/badge.svg?branch=master&service=github)](https://coveralls.io/github/knarka/woah?branch=master)
+[![Code Climate](https://codeclimate.com/github/knarka/woah/badges/gpa.svg)](https://codeclimate.com/github/knarka/woah)
 [![Gem Version](https://badge.fury.io/rb/woah.svg)](https://badge.fury.io/rb/woah)
 
 Woah! is an unobtrusive, (extremely) minimal web framework built on Rack.
