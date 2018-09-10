@@ -130,25 +130,12 @@ module Woah
 			# @param key [String] the name of the cookie
 			# @param value [nil, :delete, String]
 			def cookie(key, value = nil)
-				# Read cookie
 				if value.nil?
-					@@request.env['HTTP_COOKIE']&.split('; ')&.each do |c|
-						s = c.split('=')
-						return s[1] if s[0] == key
-					end
-					nil # if not found
-
-				# Delete cookie
+					read_cookie key
 				elsif value == :delete
-					@@override[:headers] = {}
-					Rack::Utils.delete_cookie_header! @@override[:headers], key
-
-				# Set cookie
+					del_cookie key
 				elsif value.is_a? String
-					@@override[:headers] = {}
-					Rack::Utils.set_cookie_header! @@override[:headers], key, value
-
-				# Invalid argument
+					set_cookie key, value
 				else
 					raise ArgumentError, 'Value should be either nil, :delete, or a string'
 				end
@@ -162,6 +149,26 @@ module Woah
 			# Returns the value of class attribute request
 			def request
 				@@request
+			end
+
+			private
+
+			def read_cookie(key)
+				@@request.env['HTTP_COOKIE']&.split('; ')&.each do |c|
+					s = c.split('=')
+					return s[1] if s[0] == key
+				end
+				nil # if not found
+			end
+
+			def del_cookie(key)
+				@@override[:headers] ||= {}
+				Rack::Utils.delete_cookie_header! @@override[:headers], key
+			end
+
+			def set_cookie(key, value)
+				@@override[:headers] ||= {}
+				Rack::Utils.set_cookie_header! @@override[:headers], key, value
 			end
 		end
 	end
