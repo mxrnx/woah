@@ -5,13 +5,12 @@ module Woah
 	class Base
 		@@before = nil
 		@@after = nil
-		@@match = nil
-		@@request = nil
 		@@routes = []
 
 		def initialize
 			@@override = {}
 			@@match = nil
+			@@request = nil
 			@@response = nil
 		end
 
