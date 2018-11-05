@@ -71,8 +71,8 @@ module Woah
 			end
 
 			# Get this show on the road.
-			# @host [String] the host to use
-			# @port [Integer] the port to use
+			# @param host [String] the host to use
+			# @param port [Integer] the port to use
 			def run!(host = '0.0.0.0', port = 4422)
 				Rack::Handler.pick(%w[thin puma]).run new, Host: host, Port: port
 			end
