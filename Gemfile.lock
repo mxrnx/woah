@@ -16,7 +16,7 @@ GEM
     parser (2.5.1.2)
       ast (~> 2.4.0)
     powerpack (0.1.2)
-    rack (2.0.5)
+    rack (2.0.6)
     rainbow (3.0.0)
     rake (12.3.1)
     rubocop (0.59.0)
