@@ -15,7 +15,7 @@ require 'minitest/autorun'
 require_relative 'test_app'
 
 Dir.foreach('test/') do |test|
-	next if ['.', '..'].include? test
+  next if ['.', '..'].include? test
 
-	require_relative test
+  require_relative test
 end
