@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Woah
-	# Base for apps
+	# Base for apps.
 	class Base
 		@@before = nil
 		@@after = nil
@@ -37,14 +37,14 @@ module Woah
 			@@response.values
 		end
 
-		# Applies user overrides
+		# Applies user overrides.
 		def override_values
 			%i[status headers body].each do |r|
 				@@response[r] = @@override[r] unless @@override[r].nil?
 			end
 		end
 
-		# Resolves and executes a round
+		# Resolves and executes a round.
 		# @param path [String, Regexp] the path to respond to
 		# @param method [String] the HTTP method to use
 		# @return [Hash] the route's response
@@ -65,7 +65,7 @@ module Woah
 		end
 
 		class << self
-			# Forwards to a new instance's #call method
+			# Forwards to a new instance's #call method.
 			def call(env)
 				new.call env
 			end
@@ -77,7 +77,8 @@ module Woah
 				Rack::Handler.pick(%w[thin puma]).run new, Host: host, Port: port
 			end
 
-			# Register new routes. The optional method argument can be used to specify a method
+			# Register new routes. The optional method argument can be used to specify
+			# a method.
 			# @param path [String, Regexp] the path to respond to
 			# @param method [String] the HTTP method to use
 			# @raise [ArgumentError] if `method` is not a valid HTTP method
@@ -89,12 +90,12 @@ module Woah
 				@@routes.push Route.new(path, method, &action)
 			end
 
-			# Takes a block that will be executed after every route
+			# Takes a block that will be executed before every route.
 			def before(&action)
 				@@before = action
 			end
 
-			# Takes a block that will be executed after every route
+			# Takes a block that will be executed after every route.
 			def after(&action)
 				@@after = action
 			end
@@ -125,8 +126,9 @@ module Woah
 				@@override[item] = content
 			end
 
-			# Set or read cookies
-			# Depending on the type of `value`, respectively reads, deletes, or sets a cookie
+			# Set or read cookies.
+			# Depending on the type of `value`, respectively reads, deletes, or sets
+			# a cookie.
 			# @param key [String] the name of the cookie
 			# @param value [nil, :delete, String]
 			def cookie(key, value = nil)
@@ -141,12 +143,12 @@ module Woah
 				end
 			end
 
-			# Returns the value of class attribute match
+			# Returns the value of class attribute match.
 			def match
 				@@match
 			end
 
-			# Returns the value of class attribute request
+			# Returns the value of class attribute request.
 			def request
 				@@request
 			end
