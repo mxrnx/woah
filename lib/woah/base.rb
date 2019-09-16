@@ -40,7 +40,8 @@ module Woah
     # Applies user overrides.
     def override_values
       %i[status headers body].each do |r|
-        @@response[r] = @@override[r] unless @@override[r].nil?
+        o = @@override[r]
+        @@response[r] = o unless o.nil?
       end
     end
 
