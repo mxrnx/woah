@@ -8,4 +8,15 @@ class MiscTest < MiniTest::Test
       end
     end
   end
+
+  # smoke test, will fail on exceptions
+  def test_smoke
+    thread = Thread.new do
+      TestApp.run! 'localhost'
+    end
+
+    sleep 2
+
+    thread.kill
+  end
 end
