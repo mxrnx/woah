@@ -7,7 +7,7 @@ module Woah
 
     def initialize(path, method, &action)
       unless [String, Regexp].include? path.class
-        raise 'only strings and regexps are valid paths'
+        raise ArgumentError, 'only strings and regexps are valid paths'
       end
 
       @path = path
