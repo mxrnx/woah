@@ -6,7 +6,9 @@ module Woah
 		attr_accessor :match
 
 		def initialize(path, method, &action)
-			raise 'only strings and regexps are valid paths' unless [String, Regexp].include? path.class
+			unless [String, Regexp].include? path.class
+				raise 'only strings and regexps are valid paths'
+			end
 
 			@path = path
 			@method = method
