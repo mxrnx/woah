@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/knarka/woah'
 
   s.add_dependency 'rack', '= 2.0.6'
-  s.required_ruby_version = '>= 2.3.3'
+  s.required_ruby_version = '>= 2.5.5'
 
   s.files = %w[LICENSE README.md] + Dir.glob('{lib,test}/**/*')
 
