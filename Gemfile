@@ -7,3 +7,4 @@ gem 'minitest'
 gem 'rack'
 gem 'rake'
 gem 'rubocop', require: false
+gem 'thin'
