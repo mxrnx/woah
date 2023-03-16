@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.email = 'knarka@airmail.cc'
   s.homepage = 'https://github.com/knarka/woah'
 
-  s.add_dependency 'rack', '= 2.1.4'
+  s.add_dependency 'rack', '= 2.2.6.4'
   s.required_ruby_version = '>= 2.5.5'
 
   s.files = %w[LICENSE README.md] + Dir.glob('{lib,test}/**/*')
